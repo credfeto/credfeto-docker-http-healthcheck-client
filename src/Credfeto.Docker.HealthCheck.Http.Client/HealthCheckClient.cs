@@ -49,7 +49,7 @@ public static class HealthCheckClient
         return httpClient;
     }
 
-    public static bool IsHealthCheck(string[] args, [NotNullWhen(true)] out string? target)
+    public static bool IsHealthCheck(in ReadOnlySpan<string> args, [NotNullWhen(true)] out string? target)
     {
         if (args.Length == 2 && StringComparer.OrdinalIgnoreCase.Equals(args[0], y: "--health-check"))
         {
