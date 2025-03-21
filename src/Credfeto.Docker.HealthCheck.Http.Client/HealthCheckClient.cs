@@ -13,6 +13,7 @@ internal static class HealthCheckClient
 
     public static async ValueTask<int> ExecuteAsync(string targetUrl, CancellationToken cancellationToken)
     {
+        // TODO: Add Tests
         if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
         {
             return HEALTHCHECK_FAIL;
