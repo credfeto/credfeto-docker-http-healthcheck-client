@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Credfeto.Docker.HealthCheck.Http.Client;
 
-internal static class HealthCheckClient
+public static class HealthCheckClient
 {
     private const int HEALTHCHECK_SUCCESS = 0;
     private const int HEALTHCHECK_FAIL = 1;
