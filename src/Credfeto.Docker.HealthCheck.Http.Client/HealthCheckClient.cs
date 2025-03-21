@@ -11,33 +11,41 @@ internal static class HealthCheckClient
     private const int HEALTHCHECK_SUCCESS = 0;
     private const int HEALTHCHECK_FAIL = 1;
 
-    public static async ValueTask<int> ExecuteAsync(string targetUrl)
+    public static async ValueTask<int> ExecuteAsync(string targetUrl, CancellationToken cancellationToken)
     {
         if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
         {
             return HEALTHCHECK_FAIL;
         }
 
-        using (HttpClient httpClient = new() { BaseAddress = uri })
+        using (HttpClient httpClient = CreateHttpClient(uri))
         {
-            httpClient.DefaultRequestHeaders.ConnectionClose = true;
-
             try
             {
-                using (HttpResponseMessage r = await httpClient.GetAsync(requestUri: uri, cancellationToken: CancellationToken.None))
+                using (HttpResponseMessage r = await httpClient.GetAsync(requestUri: uri, cancellationToken: cancellationToken))
                 {
                     return r.IsSuccessStatusCode
                         ? HEALTHCHECK_SUCCESS
                         : HEALTHCHECK_FAIL;
                 }
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(exception.Message);
 
                 return HEALTHCHECK_FAIL;
             }
         }
+    }
+
+    private static HttpClient CreateHttpClient(Uri uri)
+    {
+        // TODO: Configure client with default headers and options
+        HttpClient httpClient = new() { BaseAddress = uri };
+
+        httpClient.DefaultRequestHeaders.ConnectionClose = true;
+
+        return httpClient;
     }
 
     public static bool IsHealthCheck(string[] args, [NotNullWhen(true)] out string? target)
