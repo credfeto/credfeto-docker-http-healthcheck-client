@@ -11,7 +11,10 @@ public static class HealthCheckClient
     private const int HEALTHCHECK_SUCCESS = 0;
     private const int HEALTHCHECK_FAIL = 1;
 
-    public static async ValueTask<int> ExecuteAsync(string targetUrl, CancellationToken cancellationToken)
+    public static async ValueTask<int> ExecuteAsync(
+        string targetUrl,
+        CancellationToken cancellationToken
+    )
     {
         // TODO: Add Tests
         if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
@@ -23,11 +26,14 @@ public static class HealthCheckClient
         {
             try
             {
-                using (HttpResponseMessage r = await httpClient.GetAsync(requestUri: uri, cancellationToken: cancellationToken))
+                using (
+                    HttpResponseMessage r = await httpClient.GetAsync(
+                        requestUri: uri,
+                        cancellationToken: cancellationToken
+                    )
+                )
                 {
-                    return r.IsSuccessStatusCode
-                        ? HEALTHCHECK_SUCCESS
-                        : HEALTHCHECK_FAIL;
+                    return r.IsSuccessStatusCode ? HEALTHCHECK_SUCCESS : HEALTHCHECK_FAIL;
                 }
             }
             catch (Exception exception)
@@ -49,9 +55,15 @@ public static class HealthCheckClient
         return httpClient;
     }
 
-    public static bool IsHealthCheck(in ReadOnlySpan<string> args, [NotNullWhen(true)] out string? target)
+    public static bool IsHealthCheck(
+        in ReadOnlySpan<string> args,
+        [NotNullWhen(true)] out string? target
+    )
     {
-        if (args.Length == 2 && StringComparer.OrdinalIgnoreCase.Equals(args[0], y: "--health-check"))
+        if (
+            args.Length == 2
+            && StringComparer.OrdinalIgnoreCase.Equals(args[0], y: "--health-check")
+        )
         {
             target = args[1];
 
