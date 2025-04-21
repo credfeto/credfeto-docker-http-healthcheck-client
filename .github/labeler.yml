@@ -12,6 +12,8 @@
  - any: [ 'src/**/*.json', '!src/global.json' ]
 "credfeto-docker-healthcheck-http-client":
  - any: [ 'src/$Credfeto.Docker.HealthCheck.Http.Client/**/*' ]
+"credfeto-docker-healthcheck-http-client-tests":
+ - any: [ 'src/$Credfeto.Docker.HealthCheck.Http.Client.Tests/**/*' ]
 "github-actions":
  - any: [ '.github/workflows/*.yml' ]
 "Legal Text":
