@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 1.6.3
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.13.0.120203
 - SDK - Updated DotNet SDK to 9.0.303
+- Dependencies - Updated Credfeto.Enumeration to 1.2.121.1337
 ### Removed
 ### Deployment Changes
 
