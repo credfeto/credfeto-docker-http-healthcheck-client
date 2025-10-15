@@ -13,7 +13,6 @@ public static class HealthCheckClient
 
     public static async ValueTask<int> ExecuteAsync(string targetUrl, CancellationToken cancellationToken)
     {
-        // TODO: Add Tests
         if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
         {
             return HEALTHCHECK_FAIL;
@@ -44,7 +43,6 @@ public static class HealthCheckClient
 
     private static HttpClient CreateHttpClient(Uri uri)
     {
-        // TODO: Configure client with default headers and options
         HttpClient httpClient = new() { BaseAddress = uri };
 
         httpClient.DefaultRequestHeaders.ConnectionClose = true;
