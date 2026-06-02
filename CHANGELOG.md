@@ -9,6 +9,15 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+### Changed
+### Deprecated
+### Removed
+### Deployment Changes
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.66] - 2026-06-02
+### Fixed
 - Replace Console.WriteLine with structured logging using ILogger and LoggerMessage source generation
 ### Changed
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.0.1978
@@ -18,12 +27,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated Credfeto.Enumeration to 1.2.143.1876
 - Dependencies - Updated Meziantou.Analyzer to 3.0.96
 - Dependencies - Updated SonarAnalyzer.CSharp to 10.27.0.140913
-### Deprecated
-### Removed
-### Deployment Changes
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
+
 ## [0.0.65] - 2026-05-13
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.142.1836
