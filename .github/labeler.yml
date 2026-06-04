@@ -11,9 +11,9 @@
 "Config Change":
  - any: [ 'src/**/*.json', '!src/global.json' ]
 "credfeto-docker-healthcheck-http-client":
- - any: [ 'src/$Credfeto.Docker.HealthCheck.Http.Client/**/*' ]
+ - any: [ 'src/Credfeto.Docker.HealthCheck.Http.Client/**/*' ]
 "credfeto-docker-healthcheck-http-client-tests":
- - any: [ 'src/$Credfeto.Docker.HealthCheck.Http.Client.Tests/**/*' ]
+ - any: [ 'src/Credfeto.Docker.HealthCheck.Http.Client.Tests/**/*' ]
 "dotnet":
  - any: [ 'src/**/*.csproj' ]
 "Editorconfig":
