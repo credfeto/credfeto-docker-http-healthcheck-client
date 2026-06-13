@@ -9,6 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+- on_new_pr workflow - restore local composite actions (enable-automerge and approve-pr) with checkout of base SHA before use
 ### Changed
 ### Deprecated
 ### Removed
