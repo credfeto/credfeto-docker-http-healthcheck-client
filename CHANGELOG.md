@@ -10,15 +10,18 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
-- Dependencies - Updated Meziantou.Analyzer to 3.0.109
-- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
 ### Deprecated
 ### Removed
 ### Deployment Changes
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.72] - 2026-06-23
+### Changed
+- Dependencies - Updated Credfeto.Enumeration to 1.2.148.2012
+- Dependencies - Updated Meziantou.Analyzer to 3.0.109
+- Dependencies - Updated Microsoft.VisualStudio.Threading.Analyzers to 18.7.23
+
 ## [0.0.71] - 2026-06-19
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.147.2001
