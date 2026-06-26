@@ -81,7 +81,7 @@ public static class HealthCheckClient
                 return HEALTHCHECK_SUCCESS;
             }
         }
-        catch (OperationCanceledException)
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
             throw;
         }
