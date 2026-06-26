@@ -138,6 +138,24 @@ public sealed class HealthCheckClientTests : TestBase
     }
 
     [Fact]
+    public async ValueTask ExecuteAsync_WithInvalidUrlFormatAndHandler_ReturnsOne()
+    {
+        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        CancellationToken cancellationToken = this.CancellationToken();
+
+        using FixedResponseHandler handler = new(HttpStatusCode.OK);
+
+        int result = await HealthCheckClient.ExecuteAsync(
+            targetUrl: INVALID_URL,
+            handler: handler,
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
+
+        Assert.Equal(expected: 1, actual: result);
+    }
+
+    [Fact]
     public async ValueTask ExecuteAsync_WhenHttpThrows_ReturnsOne()
     {
         ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
