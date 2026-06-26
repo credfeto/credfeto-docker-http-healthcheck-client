@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Credfeto.Docker.HealthCheck.Http.Client;
@@ -85,5 +87,102 @@ public sealed class HealthCheckClientTests : TestBase
         );
 
         Assert.Equal(expected: 1, actual: result);
+    }
+
+    [Fact]
+    public async ValueTask ExecuteAsync_WithSuccessResponse_ReturnsZero()
+    {
+        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        CancellationToken cancellationToken = this.CancellationToken();
+
+        using FixedResponseHandler handler = new(HttpStatusCode.OK);
+
+        int result = await HealthCheckClient.ExecuteAsync(
+            targetUrl: VALID_URL,
+            handler: handler,
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
+
+        Assert.Equal(expected: 0, actual: result);
+    }
+
+    [Theory]
+    [InlineData(HttpStatusCode.ServiceUnavailable)]
+    [InlineData(HttpStatusCode.InternalServerError)]
+    [InlineData(HttpStatusCode.NotFound)]
+    public async ValueTask ExecuteAsync_WithNonSuccessResponse_ReturnsOne(HttpStatusCode statusCode)
+    {
+        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        CancellationToken cancellationToken = this.CancellationToken();
+
+        using FixedResponseHandler handler = new(statusCode);
+
+        int result = await HealthCheckClient.ExecuteAsync(
+            targetUrl: VALID_URL,
+            handler: handler,
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
+
+        Assert.Equal(expected: 1, actual: result);
+    }
+
+    [Fact]
+    public async ValueTask ExecuteAsync_WhenHttpThrows_ReturnsOne()
+    {
+        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        CancellationToken cancellationToken = this.CancellationToken();
+
+        using ThrowingHandler handler = new();
+
+        int result = await HealthCheckClient.ExecuteAsync(
+            targetUrl: VALID_URL,
+            handler: handler,
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
+
+        Assert.Equal(expected: 1, actual: result);
+    }
+
+    [Fact]
+    public async ValueTask ExecuteAsync_WithInvalidUrlFormatAndHandler_ReturnsOne()
+    {
+        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        CancellationToken cancellationToken = this.CancellationToken();
+
+        using FixedResponseHandler handler = new(HttpStatusCode.OK);
+
+        int result = await HealthCheckClient.ExecuteAsync(
+            targetUrl: INVALID_URL,
+            handler: handler,
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
+
+        Assert.Equal(expected: 1, actual: result);
+    }
+
+    private sealed class FixedResponseHandler(HttpStatusCode statusCode) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
+        {
+            return Task.FromResult(new HttpResponseMessage(statusCode));
+        }
+    }
+
+    private sealed class ThrowingHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
+        {
+            throw new HttpRequestException("Simulated connection failure");
+        }
     }
 }
