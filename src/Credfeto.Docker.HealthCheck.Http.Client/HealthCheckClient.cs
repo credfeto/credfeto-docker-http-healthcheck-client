@@ -73,7 +73,7 @@ public static class HealthCheckClient
             {
                 if (!r.IsSuccessStatusCode)
                 {
-                    logger.HealthCheckUnhealthy(uri: uri, statusCode: r.StatusCode);
+                    logger.HealthCheckUnhealthy(statusCode: r.StatusCode, uri: uri);
 
                     return HEALTHCHECK_FAIL;
                 }

@@ -14,5 +14,5 @@ internal static partial class HealthCheckClientLoggingExtensions
         Level = LogLevel.Error,
         Message = "Healthcheck returned unhealthy status {statusCode} for {uri}"
     )]
-    internal static partial void HealthCheckUnhealthy(this ILogger logger, Uri uri, HttpStatusCode statusCode);
+    internal static partial void HealthCheckUnhealthy(this ILogger logger, HttpStatusCode statusCode, Uri uri);
 }
