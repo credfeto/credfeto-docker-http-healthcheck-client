@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Credfeto.Docker.HealthCheck.Http.Client;
 using FunFair.Test.Common;
 using Microsoft.Extensions.Logging;
+using NSubstitute;
 using Xunit;
 
 namespace Credfeto.Docker.HealthCheck.Http.Client.Tests;
@@ -114,6 +115,7 @@ public sealed class HealthCheckClientTests : TestBase
     public async ValueTask ExecuteAsync_WithNonSuccessResponse_ReturnsOne(HttpStatusCode statusCode)
     {
         ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        logger.IsEnabled(LogLevel.Error).Returns(true);
         CancellationToken cancellationToken = this.CancellationToken();
 
         using FixedResponseHandler handler = new(statusCode);
@@ -126,6 +128,13 @@ public sealed class HealthCheckClientTests : TestBase
         );
 
         Assert.Equal(expected: 1, actual: result);
+        Assert.Contains(
+            logger.ReceivedCalls(),
+            call =>
+                StringComparer.Ordinal.Equals(call.GetMethodInfo().Name, "Log")
+                && call.GetArguments()[0] is LogLevel logLevel
+                && logLevel == LogLevel.Error
+        );
     }
 
     [Fact]
