@@ -81,6 +81,10 @@ public static class HealthCheckClient
                 return HEALTHCHECK_SUCCESS;
             }
         }
+        catch (OperationCanceledException)
+        {
+            throw;
+        }
         catch (Exception exception)
         {
             logger.HealthCheckFailed(uri, exception);
