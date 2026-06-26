@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http;
 using System.Threading;
@@ -26,30 +26,81 @@ public static class HealthCheckClient
 
         using (HttpClient httpClient = CreateHttpClient(uri))
         {
-            try
-            {
-                using (
-                    HttpResponseMessage r = await httpClient.GetAsync(
-                        requestUri: uri,
-                        cancellationToken: cancellationToken
-                    )
-                )
-                {
-                    return r.IsSuccessStatusCode ? HEALTHCHECK_SUCCESS : HEALTHCHECK_FAIL;
-                }
-            }
-            catch (Exception exception)
-            {
-                logger.HealthCheckFailed(uri, exception);
+            return await ExecuteWithClientAsync(
+                uri: uri,
+                httpClient: httpClient,
+                logger: logger,
+                cancellationToken: cancellationToken
+            );
+        }
+    }
 
-                return HEALTHCHECK_FAIL;
+    public static async ValueTask<int> ExecuteAsync(
+        string targetUrl,
+        HttpMessageHandler handler,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
+        {
+            return HEALTHCHECK_FAIL;
+        }
+
+        using (HttpClient httpClient = CreateHttpClient(uri: uri, handler: handler))
+        {
+            return await ExecuteWithClientAsync(
+                uri: uri,
+                httpClient: httpClient,
+                logger: logger,
+                cancellationToken: cancellationToken
+            );
+        }
+    }
+
+    private static async ValueTask<int> ExecuteWithClientAsync(
+        Uri uri,
+        HttpClient httpClient,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        try
+        {
+            using (
+                HttpResponseMessage r = await httpClient.GetAsync(requestUri: uri, cancellationToken: cancellationToken)
+            )
+            {
+                if (!r.IsSuccessStatusCode)
+                {
+                    logger.HealthCheckUnhealthy(uri: uri, statusCode: r.StatusCode);
+
+                    return HEALTHCHECK_FAIL;
+                }
+
+                return HEALTHCHECK_SUCCESS;
             }
+        }
+        catch (Exception exception)
+        {
+            logger.HealthCheckFailed(uri, exception);
+
+            return HEALTHCHECK_FAIL;
         }
     }
 
     private static HttpClient CreateHttpClient(Uri uri)
     {
         HttpClient httpClient = new() { BaseAddress = uri };
+
+        httpClient.DefaultRequestHeaders.ConnectionClose = true;
+
+        return httpClient;
+    }
+
+    private static HttpClient CreateHttpClient(Uri uri, HttpMessageHandler handler)
+    {
+        HttpClient httpClient = new(handler) { BaseAddress = uri };
 
         httpClient.DefaultRequestHeaders.ConnectionClose = true;
 
