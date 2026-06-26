@@ -24,7 +24,7 @@ public static class HealthCheckClient
             return HEALTHCHECK_FAIL;
         }
 
-        using (HttpClient httpClient = CreateHttpClient(uri))
+        using (HttpClient httpClient = CreateHttpClient())
         {
             return await ExecuteWithClientAsync(
                 uri: uri,
@@ -47,7 +47,7 @@ public static class HealthCheckClient
             return HEALTHCHECK_FAIL;
         }
 
-        using (HttpClient httpClient = CreateHttpClient(uri: uri, handler: handler))
+        using (HttpClient httpClient = CreateHttpClient(handler))
         {
             return await ExecuteWithClientAsync(
                 uri: uri,
@@ -89,19 +89,18 @@ public static class HealthCheckClient
         }
     }
 
-    private static HttpClient CreateHttpClient(Uri uri)
+    private static HttpClient CreateHttpClient()
     {
-        HttpClient httpClient = new() { BaseAddress = uri };
-
-        httpClient.DefaultRequestHeaders.ConnectionClose = true;
-
-        return httpClient;
+        return ConfigureHttpClient(new HttpClient());
     }
 
-    private static HttpClient CreateHttpClient(Uri uri, HttpMessageHandler handler)
+    private static HttpClient CreateHttpClient(HttpMessageHandler handler)
     {
-        HttpClient httpClient = new(handler, disposeHandler: false) { BaseAddress = uri };
+        return ConfigureHttpClient(new HttpClient(handler, disposeHandler: false));
+    }
 
+    private static HttpClient ConfigureHttpClient(HttpClient httpClient)
+    {
         httpClient.DefaultRequestHeaders.ConnectionClose = true;
 
         return httpClient;
