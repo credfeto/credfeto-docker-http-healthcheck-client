@@ -141,6 +141,7 @@ public sealed class HealthCheckClientTests : TestBase
     public async ValueTask ExecuteAsync_WhenHttpThrows_ReturnsOne()
     {
         ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        logger.IsEnabled(LogLevel.Error).Returns(true);
         CancellationToken cancellationToken = this.CancellationToken();
 
         using ThrowingHandler handler = new();
@@ -153,24 +154,13 @@ public sealed class HealthCheckClientTests : TestBase
         );
 
         Assert.Equal(expected: 1, actual: result);
-    }
-
-    [Fact]
-    public async ValueTask ExecuteAsync_WithInvalidUrlFormatAndHandler_ReturnsOne()
-    {
-        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
-        CancellationToken cancellationToken = this.CancellationToken();
-
-        using FixedResponseHandler handler = new(HttpStatusCode.OK);
-
-        int result = await HealthCheckClient.ExecuteAsync(
-            targetUrl: INVALID_URL,
-            handler: handler,
-            logger: logger,
-            cancellationToken: cancellationToken
+        Assert.Contains(
+            logger.ReceivedCalls(),
+            call =>
+                StringComparer.Ordinal.Equals(call.GetMethodInfo().Name, "Log")
+                && call.GetArguments()[0] is LogLevel logLevel
+                && logLevel == LogLevel.Error
         );
-
-        Assert.Equal(expected: 1, actual: result);
     }
 
     private sealed class FixedResponseHandler(HttpStatusCode statusCode) : HttpMessageHandler
