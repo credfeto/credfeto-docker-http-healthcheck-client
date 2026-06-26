@@ -100,7 +100,7 @@ public static class HealthCheckClient
 
     private static HttpClient CreateHttpClient(Uri uri, HttpMessageHandler handler)
     {
-        HttpClient httpClient = new(handler) { BaseAddress = uri };
+        HttpClient httpClient = new(handler, disposeHandler: false) { BaseAddress = uri };
 
         httpClient.DefaultRequestHeaders.ConnectionClose = true;
 
