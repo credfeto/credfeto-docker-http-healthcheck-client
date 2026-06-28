@@ -67,6 +67,11 @@ public static class HealthCheckClient
         CancellationToken cancellationToken
     )
     {
+        string safeUri = uri.GetComponents(
+            UriComponents.Scheme | UriComponents.Host | UriComponents.Port | UriComponents.Path,
+            UriFormat.UriEscaped
+        );
+
         try
         {
             using (
@@ -75,7 +80,7 @@ public static class HealthCheckClient
             {
                 if (!r.IsSuccessStatusCode)
                 {
-                    logger.HealthCheckUnhealthy(statusCode: r.StatusCode, uri: uri.GetLeftPart(UriPartial.Path));
+                    logger.HealthCheckUnhealthy(statusCode: r.StatusCode, uri: safeUri);
 
                     return HEALTHCHECK_FAIL;
                 }
@@ -89,7 +94,7 @@ public static class HealthCheckClient
         }
         catch (Exception exception)
         {
-            logger.HealthCheckFailed(uri.GetLeftPart(UriPartial.Path), exception);
+            logger.HealthCheckFailed(safeUri, exception);
 
             return HEALTHCHECK_FAIL;
         }
