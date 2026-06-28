@@ -134,6 +134,8 @@ public sealed class HealthCheckClientTests : TestBase
                 StringComparer.Ordinal.Equals(call.GetMethodInfo().Name, "Log")
                 && call.GetArguments()[0] is LogLevel logLevel
                 && logLevel == LogLevel.Error
+                && call.GetArguments()[1] is EventId eventId
+                && eventId.Id == 1
         );
     }
 
@@ -178,6 +180,8 @@ public sealed class HealthCheckClientTests : TestBase
                 StringComparer.Ordinal.Equals(call.GetMethodInfo().Name, "Log")
                 && call.GetArguments()[0] is LogLevel logLevel
                 && logLevel == LogLevel.Error
+                && call.GetArguments()[1] is EventId eventId
+                && eventId.Id == 0
         );
     }
 
