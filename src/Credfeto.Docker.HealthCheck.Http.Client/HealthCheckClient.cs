@@ -75,7 +75,7 @@ public static class HealthCheckClient
             {
                 if (!r.IsSuccessStatusCode)
                 {
-                    logger.HealthCheckUnhealthy(statusCode: r.StatusCode, uri: uri);
+                    logger.HealthCheckUnhealthy(statusCode: r.StatusCode, uri: uri.GetLeftPart(UriPartial.Path));
 
                     return HEALTHCHECK_FAIL;
                 }
@@ -89,7 +89,7 @@ public static class HealthCheckClient
         }
         catch (Exception exception)
         {
-            logger.HealthCheckFailed(uri, exception);
+            logger.HealthCheckFailed(uri.GetLeftPart(UriPartial.Path), exception);
 
             return HEALTHCHECK_FAIL;
         }
