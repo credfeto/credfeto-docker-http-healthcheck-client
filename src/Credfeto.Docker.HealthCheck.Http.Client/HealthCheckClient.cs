@@ -42,6 +42,8 @@ public static class HealthCheckClient
         CancellationToken cancellationToken
     )
     {
+        ArgumentNullException.ThrowIfNull(handler);
+
         if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
         {
             return HEALTHCHECK_FAIL;
