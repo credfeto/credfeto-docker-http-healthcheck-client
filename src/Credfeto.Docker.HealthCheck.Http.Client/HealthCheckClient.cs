@@ -75,7 +75,11 @@ public static class HealthCheckClient
         try
         {
             using (
-                HttpResponseMessage r = await httpClient.GetAsync(requestUri: uri, cancellationToken: cancellationToken)
+                HttpResponseMessage r = await httpClient.GetAsync(
+                    requestUri: uri,
+                    completionOption: HttpCompletionOption.ResponseHeadersRead,
+                    cancellationToken: cancellationToken
+                )
             )
             {
                 if (!r.IsSuccessStatusCode)
