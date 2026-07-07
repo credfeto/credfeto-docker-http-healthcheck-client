@@ -185,6 +185,24 @@ public sealed class HealthCheckClientTests : TestBase
         );
     }
 
+    [Fact]
+    public async ValueTask ExecuteAsync_WithSuccessResponseAndLargeBody_ReturnsZero()
+    {
+        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        CancellationToken cancellationToken = this.CancellationToken();
+
+        using LargeBodyHandler handler = new();
+
+        int result = await HealthCheckClient.ExecuteAsync(
+            targetUrl: VALID_URL,
+            handler: handler,
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
+
+        Assert.Equal(expected: 0, actual: result);
+    }
+
     private sealed class FixedResponseHandler(HttpStatusCode statusCode) : HttpMessageHandler
     {
         protected override Task<HttpResponseMessage> SendAsync(
@@ -204,6 +222,22 @@ public sealed class HealthCheckClientTests : TestBase
         )
         {
             throw new HttpRequestException("Simulated connection failure");
+        }
+    }
+
+    private sealed class LargeBodyHandler : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
+        {
+            HttpResponseMessage response = new(HttpStatusCode.OK)
+            {
+                Content = new StringContent(new string(c: 'x', count: 1_000_000)),
+            };
+
+            return Task.FromResult(response);
         }
     }
 }
