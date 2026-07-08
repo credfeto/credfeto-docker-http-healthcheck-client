@@ -10,6 +10,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
+- Use HttpCompletionOption.ResponseHeadersRead in ExecuteWithClientAsync to avoid buffering the full response body when only the status code is needed
 ### Deprecated
 ### Removed
 ### Deployment Changes
