@@ -15,6 +15,11 @@ public static class HealthCheckClient
 
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(10);
 
+    public static ValueTask<int> ExecuteAsync(string targetUrl, ILogger logger, in CancellationToken cancellationToken)
+    {
+        return ExecuteAsync(targetUrl: targetUrl, timeout: null, logger: logger, cancellationToken: cancellationToken);
+    }
+
     public static async ValueTask<int> ExecuteAsync(
         string targetUrl,
         TimeSpan? timeout,
@@ -36,6 +41,22 @@ public static class HealthCheckClient
                 cancellationToken: cancellationToken
             );
         }
+    }
+
+    public static ValueTask<int> ExecuteAsync(
+        string targetUrl,
+        HttpMessageHandler handler,
+        ILogger logger,
+        in CancellationToken cancellationToken
+    )
+    {
+        return ExecuteAsync(
+            targetUrl: targetUrl,
+            handler: handler,
+            timeout: null,
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
     }
 
     public static async ValueTask<int> ExecuteAsync(
