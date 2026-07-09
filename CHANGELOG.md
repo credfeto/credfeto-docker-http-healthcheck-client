@@ -9,7 +9,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
-- Placeholder: set an explicit HttpClient timeout so a hung health-check endpoint fails fast instead of stalling for up to 100s
+- HealthCheckClient now sets an explicit HttpClient timeout (default 10s, overridable via a new ExecuteAsync timeout parameter) so a hung health-check endpoint fails fast instead of stalling for up to 100s
 ### Changed
 - Use HttpCompletionOption.ResponseHeadersRead in ExecuteWithClientAsync to avoid buffering the full response body when only the status code is needed
 - Compute the sanitised health-check URI lazily, only when logging a failure, instead of unconditionally on every request
