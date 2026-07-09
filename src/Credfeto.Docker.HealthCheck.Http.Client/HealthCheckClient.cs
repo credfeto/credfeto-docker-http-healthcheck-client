@@ -15,9 +15,26 @@ public static class HealthCheckClient
 
     private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(10);
 
-    public static ValueTask<int> ExecuteAsync(string targetUrl, ILogger logger, in CancellationToken cancellationToken)
+    public static async ValueTask<int> ExecuteAsync(
+        string targetUrl,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
     {
-        return ExecuteAsync(targetUrl: targetUrl, timeout: null, logger: logger, cancellationToken: cancellationToken);
+        if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
+        {
+            return HEALTHCHECK_FAIL;
+        }
+
+        using (HttpClient httpClient = CreateHttpClient(timeout: null))
+        {
+            return await ExecuteWithClientAsync(
+                uri: uri,
+                httpClient: httpClient,
+                logger: logger,
+                cancellationToken: cancellationToken
+            );
+        }
     }
 
     public static async ValueTask<int> ExecuteAsync(
@@ -43,20 +60,29 @@ public static class HealthCheckClient
         }
     }
 
-    public static ValueTask<int> ExecuteAsync(
+    public static async ValueTask<int> ExecuteAsync(
         string targetUrl,
         HttpMessageHandler handler,
         ILogger logger,
-        in CancellationToken cancellationToken
+        CancellationToken cancellationToken
     )
     {
-        return ExecuteAsync(
-            targetUrl: targetUrl,
-            handler: handler,
-            timeout: null,
-            logger: logger,
-            cancellationToken: cancellationToken
-        );
+        ArgumentNullException.ThrowIfNull(handler);
+
+        if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
+        {
+            return HEALTHCHECK_FAIL;
+        }
+
+        using (HttpClient httpClient = CreateHttpClient(handler: handler, timeout: null))
+        {
+            return await ExecuteWithClientAsync(
+                uri: uri,
+                httpClient: httpClient,
+                logger: logger,
+                cancellationToken: cancellationToken
+            );
+        }
     }
 
     public static async ValueTask<int> ExecuteAsync(
