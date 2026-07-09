@@ -13,6 +13,8 @@ public static class HealthCheckClient
     private const int HEALTHCHECK_SUCCESS = 0;
     private const int HEALTHCHECK_FAIL = 1;
 
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromSeconds(10);
+
     public static async ValueTask<int> ExecuteAsync(
         string targetUrl,
         ILogger logger,
@@ -24,7 +26,30 @@ public static class HealthCheckClient
             return HEALTHCHECK_FAIL;
         }
 
-        using (HttpClient httpClient = CreateHttpClient())
+        using (HttpClient httpClient = CreateHttpClient(timeout: null))
+        {
+            return await ExecuteWithClientAsync(
+                uri: uri,
+                httpClient: httpClient,
+                logger: logger,
+                cancellationToken: cancellationToken
+            );
+        }
+    }
+
+    public static async ValueTask<int> ExecuteAsync(
+        string targetUrl,
+        TimeSpan? timeout,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
+        {
+            return HEALTHCHECK_FAIL;
+        }
+
+        using (HttpClient httpClient = CreateHttpClient(timeout))
         {
             return await ExecuteWithClientAsync(
                 uri: uri,
@@ -49,7 +74,33 @@ public static class HealthCheckClient
             return HEALTHCHECK_FAIL;
         }
 
-        using (HttpClient httpClient = CreateHttpClient(handler))
+        using (HttpClient httpClient = CreateHttpClient(handler: handler, timeout: null))
+        {
+            return await ExecuteWithClientAsync(
+                uri: uri,
+                httpClient: httpClient,
+                logger: logger,
+                cancellationToken: cancellationToken
+            );
+        }
+    }
+
+    public static async ValueTask<int> ExecuteAsync(
+        string targetUrl,
+        HttpMessageHandler handler,
+        TimeSpan? timeout,
+        ILogger logger,
+        CancellationToken cancellationToken
+    )
+    {
+        ArgumentNullException.ThrowIfNull(handler);
+
+        if (!Uri.TryCreate(uriString: targetUrl, uriKind: UriKind.Absolute, out Uri? uri))
+        {
+            return HEALTHCHECK_FAIL;
+        }
+
+        using (HttpClient httpClient = CreateHttpClient(handler: handler, timeout: timeout))
         {
             return await ExecuteWithClientAsync(
                 uri: uri,
@@ -107,19 +158,20 @@ public static class HealthCheckClient
         );
     }
 
-    private static HttpClient CreateHttpClient()
+    private static HttpClient CreateHttpClient(TimeSpan? timeout)
     {
-        return ConfigureHttpClient(new HttpClient());
+        return ConfigureHttpClient(httpClient: new HttpClient(), timeout: timeout);
     }
 
-    private static HttpClient CreateHttpClient(HttpMessageHandler handler)
+    private static HttpClient CreateHttpClient(HttpMessageHandler handler, TimeSpan? timeout)
     {
-        return ConfigureHttpClient(new HttpClient(handler, disposeHandler: false));
+        return ConfigureHttpClient(httpClient: new HttpClient(handler, disposeHandler: false), timeout: timeout);
     }
 
-    private static HttpClient ConfigureHttpClient(HttpClient httpClient)
+    private static HttpClient ConfigureHttpClient(HttpClient httpClient, TimeSpan? timeout)
     {
         httpClient.DefaultRequestHeaders.ConnectionClose = true;
+        httpClient.Timeout = timeout ?? DefaultTimeout;
 
         return httpClient;
     }
