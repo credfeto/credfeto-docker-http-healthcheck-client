@@ -83,6 +83,7 @@ public sealed class HealthCheckClientTests : TestBase
 
         int result = await HealthCheckClient.ExecuteAsync(
             targetUrl: INVALID_URL,
+            timeout: null,
             logger: logger,
             cancellationToken: cancellationToken
         );
@@ -101,6 +102,7 @@ public sealed class HealthCheckClientTests : TestBase
         int result = await HealthCheckClient.ExecuteAsync(
             targetUrl: VALID_URL,
             handler: handler,
+            timeout: null,
             logger: logger,
             cancellationToken: cancellationToken
         );
@@ -123,6 +125,7 @@ public sealed class HealthCheckClientTests : TestBase
         int result = await HealthCheckClient.ExecuteAsync(
             targetUrl: VALID_URL,
             handler: handler,
+            timeout: null,
             logger: logger,
             cancellationToken: cancellationToken
         );
@@ -150,6 +153,7 @@ public sealed class HealthCheckClientTests : TestBase
         int result = await HealthCheckClient.ExecuteAsync(
             targetUrl: INVALID_URL,
             handler: handler,
+            timeout: null,
             logger: logger,
             cancellationToken: cancellationToken
         );
@@ -169,6 +173,7 @@ public sealed class HealthCheckClientTests : TestBase
         int result = await HealthCheckClient.ExecuteAsync(
             targetUrl: VALID_URL,
             handler: handler,
+            timeout: null,
             logger: logger,
             cancellationToken: cancellationToken
         );
@@ -196,11 +201,41 @@ public sealed class HealthCheckClientTests : TestBase
         int result = await HealthCheckClient.ExecuteAsync(
             targetUrl: VALID_URL,
             handler: handler,
+            timeout: null,
             logger: logger,
             cancellationToken: cancellationToken
         );
 
         Assert.Equal(expected: 0, actual: result);
+    }
+
+    [Fact]
+    public async ValueTask ExecuteAsync_WhenEndpointHangsBeyondTimeout_ReturnsOne()
+    {
+        ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
+        logger.IsEnabled(LogLevel.Error).Returns(true);
+        CancellationToken cancellationToken = this.CancellationToken();
+
+        using HangingHandler handler = new();
+
+        int result = await HealthCheckClient.ExecuteAsync(
+            targetUrl: VALID_URL,
+            handler: handler,
+            timeout: TimeSpan.FromMilliseconds(200),
+            logger: logger,
+            cancellationToken: cancellationToken
+        );
+
+        Assert.Equal(expected: 1, actual: result);
+        Assert.Contains(
+            logger.ReceivedCalls(),
+            call =>
+                StringComparer.Ordinal.Equals(call.GetMethodInfo().Name, "Log")
+                && call.GetArguments()[0] is LogLevel logLevel
+                && logLevel == LogLevel.Error
+                && call.GetArguments()[1] is EventId eventId
+                && eventId.Id == 0
+        );
     }
 
     private sealed class FixedResponseHandler(HttpStatusCode statusCode) : HttpMessageHandler
@@ -222,6 +257,19 @@ public sealed class HealthCheckClientTests : TestBase
         )
         {
             throw new HttpRequestException("Simulated connection failure");
+        }
+    }
+
+    private sealed class HangingHandler : HttpMessageHandler
+    {
+        protected override async Task<HttpResponseMessage> SendAsync(
+            HttpRequestMessage request,
+            CancellationToken cancellationToken
+        )
+        {
+            await Task.Delay(TimeSpan.FromSeconds(30), cancellationToken);
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
     }
 
