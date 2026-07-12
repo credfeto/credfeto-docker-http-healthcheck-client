@@ -1,4 +1,5 @@
 # credfeto-docker-http-healthcheck-client
+
 Dotnet HTTP Healthcheck client
 
 Simple healthcheck method that allows talking to the local server in distro-less or chiseled containers by running the main executable with parameters detailing how to check.
@@ -25,8 +26,8 @@ public static async Task<int> Main(string[] args)
 
 ## Build Status
 
-| Branch  | Status                                                                                                                                                                                                                                |
-|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Branch  | Status                                                                                                                                                                                                                                                                              |
+|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | main    | [![Build: Pre-Release](https://github.com/credfeto/credfeto-docker-http-healthcheck-client/actions/workflows/build-and-publish-pre-release.yml/badge.svg)](https://github.com/credfeto/credfeto-docker-http-healthcheck-client/actions/workflows/build-and-publish-pre-release.yml) |
 | release | [![Build: Release](https://github.com/credfeto/credfeto-docker-http-healthcheck-client/actions/workflows/build-and-publish-release.yml/badge.svg)](https://github.com/credfeto/credfeto-docker-http-healthcheck-client/actions/workflows/build-and-publish-release.yml)             |
 
