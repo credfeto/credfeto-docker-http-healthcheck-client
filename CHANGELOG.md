@@ -14,6 +14,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Use HttpCompletionOption.ResponseHeadersRead in ExecuteWithClientAsync to avoid buffering the full response body when only the status code is needed
 - Compute the sanitised health-check URI lazily, only when logging a failure, instead of unconditionally on every request
 - Dependencies - Updated FunFair.CodeAnalysis to 7.2.7.2152
+- Dependencies - Updated Meziantou.Analyzer to 3.0.122
 ### Deprecated
 ### Removed
 ### Deployment Changes
