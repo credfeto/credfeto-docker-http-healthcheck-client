@@ -9,6 +9,15 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+### Changed
+### Deprecated
+### Removed
+### Deployment Changes
+<!--
+Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
+-->
+## [0.0.75] - 2026-07-15
+### Fixed
 - HealthCheckClient now sets an explicit HttpClient timeout (default 10s, overridable via a new ExecuteAsync timeout parameter) so a hung health-check endpoint fails fast instead of stalling for up to 100s
 ### Changed
 - Use HttpCompletionOption.ResponseHeadersRead in ExecuteWithClientAsync to avoid buffering the full response body when only the status code is needed
@@ -19,12 +28,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated FunFair.Test to 6.3.4.2441
 - Dependencies - Updated FunFair.Test.Source.Generator to 6.3.4.2441
 - SDK - Updated DotNet SDK to 10.0.302
-### Deprecated
-### Removed
-### Deployment Changes
-<!--
-Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
--->
+
 ## [0.0.74] - 2026-07-05
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.149.2059
