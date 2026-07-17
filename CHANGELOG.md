@@ -10,13 +10,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
 ### Deprecated
 ### Removed
 ### Deployment Changes
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+## [0.0.76] - 2026-07-17
+### Changed
+- Dependencies - Updated Credfeto.Enumeration to 1.2.151.2192
+
 ## [0.0.75] - 2026-07-15
 ### Fixed
 - HealthCheckClient now sets an explicit HttpClient timeout (default 10s, overridable via a new ExecuteAsync timeout parameter) so a hung health-check endpoint fails fast instead of stalling for up to 100s
