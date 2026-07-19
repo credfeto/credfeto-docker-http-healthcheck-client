@@ -13,7 +13,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Placeholder: drop net9.0 support so the client and its tests target net10.0 only
+- Drop net9.0 support: client and tests now target net10.0 only
 ### Deprecated
 ### Removed
 ### Deployment Changes
