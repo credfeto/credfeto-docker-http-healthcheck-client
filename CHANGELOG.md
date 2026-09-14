@@ -12,6 +12,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Security
 ### Added
 ### Fixed
+- Fixed CI build failures surfaced by FunFair.BuildCheck's latest rules (missing PackageReference IncludeAssets, legacy xunit.v3.mtp-v2 test host package) and two pre-existing Roslyn analyzer errors in the test project
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.154.2267
 - Dependencies - Updated CSharpIsNullAnalyzer to 0.2.19
@@ -29,9 +30,11 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Deprecated
 ### Removed
 ### Deployment Changes
+
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
 ## [0.0.78] - 2026-09-09
 ### Changed
 - SDK - Updated DotNet SDK to 10.0.401
