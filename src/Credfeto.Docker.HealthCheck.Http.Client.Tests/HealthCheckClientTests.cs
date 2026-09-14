@@ -32,7 +32,7 @@ public sealed class HealthCheckClientTests : TestBase
     [InlineData("--health-check")]
     [InlineData("--HEALTH-CHECK")]
     [InlineData("--Health-Check")]
-    public void IsHealthCheck_WithCaseInsensitiveFlag_ReturnsTrue(string flag)
+    public static void IsHealthCheck_WithCaseInsensitiveFlag_ReturnsTrue(string flag)
     {
         string[] args = [flag, VALID_URL];
 
@@ -147,7 +147,7 @@ public sealed class HealthCheckClientTests : TestBase
     [InlineData(HttpStatusCode.ServiceUnavailable)]
     [InlineData(HttpStatusCode.InternalServerError)]
     [InlineData(HttpStatusCode.NotFound)]
-    public async ValueTask ExecuteAsync_WithNonSuccessResponse_ReturnsOne(HttpStatusCode statusCode)
+    public async ValueTask ExecuteAsync_WithNonSuccessResponse_ReturnsOneAsync(HttpStatusCode statusCode)
     {
         ILogger<HealthCheckClientTests> logger = this.GetTypedLogger<HealthCheckClientTests>();
         logger.IsEnabled(LogLevel.Error).Returns(true);
