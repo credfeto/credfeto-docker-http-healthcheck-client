@@ -15,9 +15,10 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Changed
 - Dependencies - Updated Credfeto.Enumeration to 1.2.158.2511
 - SDK - Updated DotNet SDK to 11.0.100-rc.3.26522.148
-- Target .NET 11 and enable runtime-async
+- Target .NET 11 with runtime-async enabled for both the client and the tests
 ### Deprecated
 ### Removed
+- Removed Microsoft.Extensions.Logging.Abstractions package reference, now provided by the .NET 11 shared framework
 ### Deployment Changes
 
 <!--
