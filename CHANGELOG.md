@@ -13,17 +13,21 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Credfeto.Enumeration to 1.2.158.2511
-- Target .NET 11 with runtime-async enabled for both the client and the tests
-- SDK - Updated DotNet SDK to 11.0.100
 ### Deprecated
 ### Removed
-- Removed Microsoft.Extensions.Logging.Abstractions package reference, now provided by the .NET 11 shared framework
 ### Deployment Changes
 
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
+## [0.0.85] - 2026-11-14
+### Changed
+- Dependencies - Updated Credfeto.Enumeration to 1.2.158.2511
+- Target .NET 11 with runtime-async enabled for both the client and the tests
+- SDK - Updated DotNet SDK to 11.0.100
+### Removed
+- Removed Microsoft.Extensions.Logging.Abstractions package reference, now provided by the .NET 11 shared framework
 
 ## [0.0.84] - 2026-11-03
 ### Changed
