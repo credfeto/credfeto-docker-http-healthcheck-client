@@ -19,7 +19,7 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 - Dependencies - Updated xunit.analyzers to 2.3.0
 - Dependencies - Updated xunit.v3 to 4.0.3
 - Dependencies - Updated Credfeto.Enumeration to 1.2.159.2554
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.27.2695
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.28.2699
 ### Deprecated
 ### Removed
 ### Deployment Changes
