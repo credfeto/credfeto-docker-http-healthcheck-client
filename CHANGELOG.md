@@ -13,13 +13,6 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 ### Added
 ### Fixed
 ### Changed
-- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.2.0
-- Dependencies - Updated SonarAnalyzer.CSharp to 10.36.0.15337
-- Dependencies - Updated xunit.analyzers to 2.3.0
-- Dependencies - Updated xunit.v3 to 4.0.3
-- Dependencies - Updated Credfeto.Enumeration to 1.2.159.2554
-- Dependencies - Updated FunFair.CodeAnalysis to 7.2.28.2699
-- Dependencies - Updated Meziantou.Analyzer to 3.0.341
 ### Deprecated
 ### Removed
 ### Deployment Changes
@@ -27,6 +20,16 @@ Please ADD ALL Changes to the UNRELEASED SECTION and not a specific release
 <!--
 Releases that have at least been deployed to staging, BUT NOT necessarily released to live.  Changes should be moved from [Unreleased] into here as they are merged into the appropriate release branch
 -->
+
+## [0.0.86] - 2026-11-16
+### Changed
+- Dependencies - Updated Philips.CodeAnalysis.MaintainabilityAnalyzers to 2.2.0
+- Dependencies - Updated SonarAnalyzer.CSharp to 10.36.0.15337
+- Dependencies - Updated xunit.analyzers to 2.3.0
+- Dependencies - Updated xunit.v3 to 4.0.3
+- Dependencies - Updated Credfeto.Enumeration to 1.2.159.2554
+- Dependencies - Updated FunFair.CodeAnalysis to 7.2.28.2699
+- Dependencies - Updated Meziantou.Analyzer to 3.0.341
 
 ## [0.0.85] - 2026-11-14
 ### Changed
