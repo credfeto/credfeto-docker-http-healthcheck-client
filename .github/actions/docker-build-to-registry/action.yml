@@ -39,15 +39,6 @@ runs:
         secret-name: "docker-container-registry"
         secret-value: "${{inputs.docker-container-registry}}"
 
-    - name: "Docker Trust Enable"
-      id: docker-trust-enable
-      shell: bash
-      run: |
-        echo "DOCKER_CONTENT_TRUST_ORIGINAL=$CONTENT_TRUST_ORIGINAL" >> "$GITHUB_ENV"
-        echo "DOCKER_CONTENT_TRUST=1" >> "$GITHUB_ENV"
-      env:
-        CONTENT_TRUST_ORIGINAL: "${{env.DOCKER_CONTENT_TRUST}}"
-
     - name: "Build and export docker container"
       id: build-test
       uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
@@ -87,8 +78,3 @@ runs:
     - name: "Move docker build cache (deploy)"
       if: steps.build-with-tags.outcome == 'success'
       uses: ./.github/actions/move-docker-build-cache
-
-    - name: "Docker Trust Restore"
-      if: always() && steps.docker-trust-enable.outcome == 'success'
-      shell: bash
-      run: echo "DOCKER_CONTENT_TRUST=$DOCKER_CONTENT_TRUST_ORIGINAL" >> "$GITHUB_ENV"
